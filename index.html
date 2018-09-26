@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+  <title>Vega Lite Bar Chart</title>
+  <meta charset="utf-8">
+
+  <!-- Check: https://github.com/vega/vega-embed -->
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@3"></script>
+
+</head>
+<body>
+<table>
+<tr>
+
+<td>
+<br><br><br>
+<p id ="plt1">
+
+
+<script type="text/javascript">
+  var lin1 = "https://raw.githubusercontent.com/pmaddisetty/VA/master/choropleth.json"
+  vegaEmbed('#plt1', lin1).then(function(result) {
+  }).catch(console.error);
+ 
+</script>
+</p>
+</td>
+
+
+<td>
+
+<p id ="plt2">
+
+<script type="text/javascript">
+  var lin = "https://raw.githubusercontent.com/pmaddisetty/VA/master/barchart.json";
+  vegaEmbed('#plt2', lin).then(function(result) {
+  }).catch(console.error);
+ 
+</script>
+</p>
+</td>
+
+
+</tr>
+</table>
+<!-- Container for the visualization -->
+
+
+
+
+
+</body>
+</html>
