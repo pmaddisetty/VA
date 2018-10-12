@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Losses 2015</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.0.1/d3.min.js"></script>
+
+        <style type="text/css">
+        svg .rect {
+            fill: blue;
+            stroke-width: 1px;
+        }
+		
+        </style>
+        
+        <script type="text/javascript">
+            function loadData()
+            {
+              d3.csv("https://raw.githubusercontent.com/pmaddisetty/VA/master/losses2015_transformed.csv")
+                .then(function(data)
+              {   
+				var gropupdamage = d3.nest()
+				.key(function(d) { return d.Damage_Descp; })
+				.rollup(function(d){ return d3.sum(d,function(g){return g.Amount;})})
+				.entries(data);
+				gropupdamage.sort(function(x,y){
+					return d3.ascending(x.value,y.value);
+				});
+				xscale=d3.scaleLinear().domain([gropupdamage[0].value,gropupdamage[32].value]).range([0,600]);
+				ticks=xscale.ticks(9);
+				yscale=d3.scaleLinear();
+                createChart(gropupdamage);
+              });
+            }
+			var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+            function createChart(gropupdamage) {
+			var xAxis=d3.axisBottom().scale(xscale);
+			xAxis.tickValues(ticks).tickFormat(function(d){return d/1000000+"M" });
+			var counter=0;
+              var svg = d3.select("body")
+                          .append("svg")
+                          .attr("width", 1500)
+                          .attr("height", 1500)
+						  .attr("margin",10);
+              svg.selectAll("g")
+                  .data(gropupdamage)
+                  .enter()
+                  .append("rect")
+                  .attr("x", 225)
+                  .attr("y", function(d, i)
+                    {
+						
+                      return (i+1)*(20+2);
+                    })
+                  .attr("height", 20)
+                  .attr("width", function(d, i)
+                    {
+                      return xscale(d.value);
+					
+                    })
+                  .attr("class", "rect");
+			  
+              svg.selectAll("text.Damage_Descp")
+                  .data(gropupdamage)
+                  .enter()
+                  .append("text")
+                  .text(function(d, i)
+                    {
+                      return d.key;
+                    })
+                  .attr("x", 0)
+                  .attr("y", function(d, i)
+                    {
+                      return (i+1)*(20+2) + 15;
+                    });
+				 
+					svg.append("line")
+					.style("stroke","black")
+					.attr("x1",220)
+					.attr("y1",22)
+					.attr("x2",220)
+					.attr("y2",745)
+					
+				svg.append("g").attr("class","axis").attr("transform","translate(220,745)").call(xAxis)	
+            }
+            window.onload = loadData;
+        </script>
+
+    </head>
+
+
+    <body>
+
+    </body>
+</html>
